@@ -3,7 +3,7 @@
 sudo systemctl stop anacron.timer
 sudo systemctl disable cron
 
-#stop anacron from listening on ports
+#stop avahi-daemon from listening on ports
 sudo systemctl stop avahi-daemon
 sudo systemctl stop avahi-daemon.socket
 sudo systemctl disable avahi-daemon.socket
