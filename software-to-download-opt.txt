@@ -1,0 +1,5 @@
+
+icecat (older versions if necessary)
+palemoon
+seamonkey
+waterfox

@@ -1,0 +1,2 @@
+
+sudo apt-get install apt-file atool build-essential chromium emacs-nox ffmpeg gedit gimp git hexchat inkscape links links2 lynx mtr-tiny net-tools php rhythmbox sshfs vim-nox xed
