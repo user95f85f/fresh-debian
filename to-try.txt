@@ -1,0 +1,2 @@
+remove light-locker to see if locking the screen doesn't get foiled then
+detect if I can change the font size in mousepad after unchecking the Preserve font family/size
