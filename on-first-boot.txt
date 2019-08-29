@@ -1,6 +1,7 @@
 
 #cron is stupid
 sudo systemctl stop anacron.timer
+sudo systemctl disable anacron.timer
 sudo systemctl disable cron
 
 #stop avahi-daemon from listening on ports
