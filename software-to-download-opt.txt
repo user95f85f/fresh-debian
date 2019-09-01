@@ -3,3 +3,5 @@ icecat (older versions if necessary)
 palemoon
 seamonkey
 waterfox
+vivaldi web browser
+brave web browser
