@@ -1,7 +1,11 @@
-
-icecat (older versions if necessary)
-palemoon
-seamonkey
-waterfox
-vivaldi web browser
-brave web browser
+<webbrowsers>
+  icecat (older versions if necessary)
+  palemoon
+  seamonkey
+  waterfox
+  vivaldi
+  brave
+  chromium
+  chrome
+  yandex
+</webbrowsers>
