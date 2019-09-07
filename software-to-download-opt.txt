@@ -1,11 +1,11 @@
 <webbrowsers>
+  brave
+  chrome
+  chromium
   icecat (older versions if necessary)
   palemoon
   seamonkey
   waterfox
   vivaldi
-  brave
-  chromium
-  chrome
   yandex
 </webbrowsers>
