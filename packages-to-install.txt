@@ -1,2 +1,2 @@
 
-sudo apt-get install apt-file atool build-essential chromium emacs-nox ffmpeg gedit gimp git hexchat inkscape links links2 lynx mtr-tiny net-tools php rhythmbox sshfs vim-nox xed
+sudo apt-get install apache2 libapache2-mod-php apt-file atool build-essential chromium default-jdk emacs-nox ffmpeg gedit gimp git gparted hexchat inkscape kate links links2 lynx mtr-tiny net-tools php rhythmbox sshfs wget vim-nox xed
