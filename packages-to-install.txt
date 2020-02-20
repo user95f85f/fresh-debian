@@ -1,2 +1,8 @@
 
-sudo apt-get install apache2 libapache2-mod-php apt-file atool build-essential chromium default-jdk emacs-nox ffmpeg gedit gimp git gparted hexchat inkscape kate links links2 lynx mtr-tiny net-tools php rhythmbox sshfs wget vim-nox xed
+sudo apt install apache2 libapache2-mod-php apt-file atool build-essential chromium default-jdk emacs-nox ffmpeg gedit gimp git gparted hexchat inkscape kate links links2 lynx mtr-tiny net-tools php rhythmbox sshfs wget vim-nox xed
+
+#get localhost rolling:
+sudo apt install apache2 libapache2-mod-php
+
+#get essential
+sudo apt install atool chromium default-jdk ffmpeg gparted hexchat kate lynx net-tools php rhythmbox wget vim-nox
