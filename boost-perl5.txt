@@ -1,0 +1,2 @@
+so I think split and join should be renamed as explode and implode
+and we should create the function file_get_contents and file_put_contents
