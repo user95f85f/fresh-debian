@@ -1,0 +1,594 @@
+#what's not here: continue{} block, OOP (mostly), threads, POD,
+#                 exporting subroutines (mostly), packages, debugging,
+#                 special variables (mostly), regular expressions (mostly).
+String fxns (chomp,chop,chr,index,lc,length,oct,ord,rindex,split,sprintf,substr,uc,ucfirst)
+Array/List fxns (@ARGV,grep,join,map,pop,push,reverse,shift,sort,splice,qw//,unshift,List::Util=shuffle)
+Hash fxns (delete,each,exists,keys,values)
+Variable fxns (defined,ref,scalar)
+All fxns(printf,undef,Data::Dumper)
+Exception fxns ($@[eval error])
+Math fxns (**,abs,hex,int,oct,rand,sqrt,Math::Trig=:pi[pi])
+Misc fxns (``,__FILE__,__LINE__,__PACKAGE__,caller,die,eval,sleep,system,warn)
+Filesystem fxns (<>,$/[$RS],chdir,chmod,Cwd,eof,File::Copy,glob,link,open,read,readlink,rename,rmdir,seek,select,stat,symlink,sysread,syswrite,sysseek,tell,umask,unlink)
+Directory fxns (mkdir,closedir,opendir,readdir,rewinddir,seekdir,telldir)
+Library fxns (Exporter)
+OOP fxns (bless)
+
+#---------------------------------------------------------------------------------
+
+# file_is_readable?(); file_is_writeable?(); is_dir?(); is_folder?();
+# is_empty_file?(); is_nonempty_file?(); is_text_file?();
+# is_binary_file?(); is_regular_file?() [ie. not directory, tty]
+# file_exists?()
+perldoc -f -X
+
+# system() backtick `` operator
+perldoc perlop #look for 'qx'
+
+# <<EOF;
+#EOF
+perldoc perlop #look for 'here-doc'
+
+#unicode stuff-that-I-find-confusing
+perldoc perluniintro
+
+#---------------------------------------------------------------------------------
+
+#on windows 8.0 using powershell 3.0
+echo 'how are you today?' | \
+  perl -Mstrict -Mwarnings -ne '$_=join(\" \", unpack(\"U*\",$_));print'
+perldoc whatever > ~/whatever.txt #& then open it with notepad.
+
+#on windows 8.0 with Strawberry perl
+perl Makefile.PL; dmake; dmake test; dmake install
+
+#doing individual tests
+prove -vbl t/whatever.t
+
+#on GNU/Linux
+echo 'how are you today?' | \
+  perl -Mstrict -Mwarnings -ne '$_=join(" ", unpack("U*",$_));print'
+
+#---------------------------------------------------------------------------------
+
+#convert binary scalar string to scalar integer value
+bin(): sub bin{return oct('0b' . $_[0])}
+
+See:
+sprintf('%b', 100) #1100100
+         %o        #144 (octal)
+         %x        #64 (hex)
+    unpack('C', chr(ord('r'))) #114
+bin(unpack('b*',chr(ord('r'))) #(01001110) -> 78
+
+ret_new_List_with_altered_returns{}: map{}
+filter_valid{}: grep{}
+
+redo next (ie. continue) last (ie. break)
+
+my $sz = 'A crazy horse named Joe.';
+if(my ($name) = $sz =~ m{A .* horse named ([^.]+)\.}){
+# m()  m''  m!!  m##  m//  //
+  say "Name: $1";
+  say "Name: $name";
+}
+#perldoc perlretut | perlreref | perlre | perlrequick | perlcheat
+
+#Precedence
+=pod
+  or
+  and
+  LIST ops
+  =
+  ?:
+  ..
+  ||  //
+  &&
+  |   ^
+  &
+  ==
+  <<  >>
+  +   -   .
+  *   /   %
+  =~
+  ~
+  **
+=cut
+#perldoc perlcheat, perldoc perlop
+
+sub callme1($){
+  print Dumper([@_]);
+  return '';
+}
+sub callme2{
+  print Dumper([@_]);
+  return '';
+}
+say callme1 1, 2, 3, 4, 5; #callme1 absorbs '1'
+say callme2 1, 2, 3, 4, 5; #callme2 absorbs all
+
+sub file_get_contents{
+  open(my $input, '<', $_[0]) or die $!;
+  my $str;
+  {
+    local $/;
+    $str = <$input>;
+  }
+  return $str;
+}
+
+#-| is post. |- is pre.
+#:raw prevents '\n' being treated as '\r\n' on Windows/Win32/Win64
+use IO::Handle;
+open(my ${input}, '<', q!mydata.txt!) or die $!;
+open(my ${output}, '|-:raw', 'tail -10 | sort') or die $!;
+=pod
+my $all;
+{
+  local $/;
+  $all = <$input>;
+}
+=cut
+my $one_byte;
+{
+  local $/ = \1; #`perldoc perlvar` & look for INPUT_RECORD_SEPARATOR or $RS
+                 #newline by default.
+  $one_byte = <$input>;
+}
+seek ${input}, 0, 0; #bring it back to the beginning.
+${output}->autoflush(1);
+print ${output} @input_lines;
+exit; #same as 'exit 0'
+
+#get all files in PWD
+opendir(my $dirh, './');
+say for(readdir($dirh));
+
+# changes all values of @array to 'whatever'!!!
+my @array = (1,2,3);
+for my $i(@array){
+  $i = 'whatever';
+}
+
+my @array = qw{1 2 3 4 5 6 7 8 9 10 11 12 13 14 15};
+$_ *= 8 for (@array);
+say shift(@array) while(@array);
+
+chomp(@output = `command`);
+
+sub name_of_sub{
+  my $argument = shift // 'default'; #meaning: execute if undef
+  return $argument . ' is OK.';
+}
+print name_of_sub();
+
+use feature qw/say/;
+use feature 'say';
+use feature qw!say!;
+use feature qw'say';
+use feature qw{say};
+use feature qw(say);
+use feature qw#say#;
+my $n = 0b0100_1011_1001_0100_1110; #309582
+say $n;
+CORE::say $n;
+
+my @array = qw{1 2 3 4 5 6 7};
+m![23]! && say for(@array);
+
+#both of these are the same:
+my $s = undef;
+my $s;
+
+my $nTotalCounted = () = get_a_list_of_whatever();
+
+my %hash = (
+  hello=>'world',
+  world=>'cyman'
+);
+foreach my $key (keys %hash){
+  delete $hash{$key};
+}
+#is the same as...
+delete @hash{keys %hash};
+#is the same as...
+%hash = ();
+#is the same as...
+undef %hash;
+
+my ($hello, $again);
+my @world = (1);
+sub hello{
+  ($hello,$again) = @world;
+  print "undefined\n" if(!defined($again)); #true.
+}
+hello();
+
+my @array = (1,2,3);
+my $val;
+while(defined($val = shift(@array))){
+  print $val;
+}
+
+for(my $i=0; $i<3; $i++){
+  print $i, "\n"; #0, 1, 2
+  my $i = 8;
+}
+
+#works the same with hashes
+my @has_values = (1,2,3);
+my @no_values = ();
+if(@has_values){
+  print "Yes I know\n";
+}
+if(! @no_values){
+  print "Yes I know\n";
+}
+
+while(my ($key,$value) = each(%ENV)){
+  print "$key:$value\n";
+}
+
+local $@; #reset to undef
+eval{ die 'msg' };
+if(my $exception = $@){
+  chomp $exception;
+  say "exception caught: $exception"; #msg at test.pl line 7.
+}
+#$exception does not exist out here.
+
+#named locators!
+if( 'whatever' =~ /^(?<_found>[hatw]+)(?<_cool>[erv]+)/ ){
+  say $+{_found}, "\n", $+{_cool}; #what\never
+}
+
+            Read
+            v Write
+            v v Append only
+            v v   Create non-existing
+            v v     Clobber existing
+<           Y N N N N *
+>           N Y N Y Y * 
+>>          N Y Y Y N *
++<          Y Y N N N
++>          Y Y N Y Y
++>>         Y Y Y Y N
+
+#convert all characters to a list of numbers:
+unpack('U*', $mystring);
+
+#file test operators
+-r File is readable by effective uid/gid.
+-w File is writable by effective uid/gid.
+-x File is executable by effective uid/gid.
+-o File is owned by effective uid.
+-e File exists.
+-z File has zero size (is empty).
+-s File has nonzero size (returns size in bytes).
+-f File is a plain file.
+-d File is a directory.
+-l File is a symbolic link.
+-T File is a textfile.
+-B File is a binary file.
+
+#get a file list from STDIN :)))
+while (<>) {
+  chomp;
+  next unless -f $_; # ignore specials
+  #...
+}
+
+#an array with spaces for when qw// just isn't enough.
+my @array = split(/, /, q{My string which has multiples, And here another, and another, end});
+
+local $" = ', '; #is initially a space. Cannot/should-not be undef.
+my @array = qw/Berkeley OSU UofO Titanium-Oxide/;
+say "@array"; #Berkeley, OSU, UofO, Titanium-Oxide
+
+my $pos=-1;
+while( ($pos = index($string, $lookfor, $pos)) > -1){
+  print "Found @ $pos\n";
+  $pos++;
+}
+
+delete @{ $dungeon[$x][$y] }{'OCCUPIED','DAMP','CLOTH'};
+
+use IPC::Run 'run';
+my $stdin = "Input";
+my $exitstatus = run [ $command, @args ], \$stdin, \my $stdout, \my $stderr;
+
+my @options = ( \&name_of_this_sub1, \&name_of_this_sub2,
+  \&name_of_this_sub3 );
+print $options[rand @options]->(); #the float auto-converts to int
+sub name_of_this_sub1{ 'yes!' }
+sub name_of_this_sub2{ 'no!' }
+sub name_of_this_sub3{ 'maybe!' }
+
+my $i_am_done = 0;
+$_ = 0;
+until($i_am_done){ #this is cool
+  $_++;
+  $i_am_done = 1 if($_ > 5)
+}
+say;
+
+(?:) means don't capture.
+EG. (?:hello|world|end of days) 
+
+
+String fxns (in,not in)
+from str (.center,.count,.find,.index,.isdigit,.isalpha,
+  .join,len,.ljust,.lstrip,.rjust,.split)
+Array/List fxns (.append,.clear,.copy,.count,.extend,in,.index,
+  .insert,list,not in,.pop,.remove,.reverse,.sort)
+Dict/Hash fxns (.values,.keys,in,not in)
+mydict = { 1:'sup', 's':'a value' }
+Variable fxns (False,int,is,None,range,repr,str,True,type)
+Math fxns (**,pow,round)
+from float (.is_integer)
+from math import (ceil,degrees,*e,fabs,floor,*pi,radians,sqrt)
+from os import unlink,stat
+from random import choice,gauss,randint,shuffle
+from re (.compile) #search compile on this page.
+from struct import pack, unpack
+
+#---------------------------------------------------------------------------------
+
+def file_get_contents(_filename):
+  ret ''.join(open(_filename, 'r').readlines())
+
+#---------------------------------------------------------------------------------
+
+#DateTime shit. pydoc datetime
+import datetime
+print(datetime.datetime.now())
+from datetime import datetime, date, time, timedelta
+datetime.now()
+dt = datetime.strptime("21/11/06 16:30", "%d/%m/%y %H:%M")
+tt = dt.timetuple()
+for it in tt:
+  print(it)
+dt -= timedelta(hours=8)
+dt.strftime('%b %d. %I:%M %p') #Jul 04. 06:01 PM
+
+#---------------------------------------------------------------------------------
+
+https://docs.python.org/3/library/pathlib.html#module-pathlib
+https://docs.python.org/3/library/os.path.html#module-os.path
+get_file_last_modified('/etc/bashrc')
+is_regular_file?()
+is_symbolic_link?()
+pydoc os
+cd() #chdir()
+chmod()
+chown() #pydoc shutil.chown()
+cp()    #pydoc shutil.copyfile()
+cp-R()  #pydoc shutil.copytree()
+df()    #pydoc shutil.disk_usage('/')
+env()   #getenv('PATH')
+file_get_last_access_timestamp()
+file_get_last_change/mod_timestamp()
+file_get_size()
+file_get_temp() #tempnam(), tmpfile(), tmpnam()
+  #pydoc tempfile
+file_get_owner()
+file_make_archive() #pydoc shutil.make_archive
+file_open()         #open()
+file_read_line-by-line() #pydoc fileinput
+file_seek(f,0)   #go back to the beginning...bitch.
+ln(target, name) #symlink()
+ls()    #aka. dir, listdir. show directory/folder contents
+mkdir() #aka. makedirs()
+mv()    #aka. rename()
+process_kill(ID, SIG) #kill_process
+process_get_owner #geteuid() get THIS process.
+ps_user_owner()   #(current processes)
+pwd()      #getcwd()
+rm()       #aka. remove(), removedirs(), rmdir()
+rm-fr()    #pydoc shutil.rmtree()
+system()   #`echo sup`
+touch()    #aka. utime(). set times for file.
+username() #getlogin() get current user's login name.
+which()    #pydoc shutil.which(str_cmd)
+
+#---------------------------------------------------------------------------------
+
+print(r'\n\n\n\n')#\n\n\n\n gets printed.
+print('\n\n\n\n') #these last two are the same.
+print("\n\n\n\n")
+
+import random
+l = [1,2,3,4,5]
+random.shuffle(l)
+print(l)
+
+mydict = {1:'sup', '2':'value'}
+print(repr(mydict)) #{1: 'sup', '2': 'value'}
+if '1' in mydict:   #NO
+  print(mydict['1'])
+if 2 in mydict:     #NO
+  print(mydict[2])
+
+f = open('readthis.txt') #default is reading
+ar = f.readlines()
+print(repr(sz)) #['line 1\n', 'line 2\n', 'line 3']
+ar.append("\na new line bitch")
+f.close()
+f = open('readthis.txt', 'w') #'w+' or 'a' to auto-create
+f.writelines(ar)              #'w+' auto-purges
+
+if ! False:
+  print('syntax error')
+if not False:
+  print('this works')
+  
+print('hello'.isalpha()) #True
+print('hello'.isdigit()) #False
+
+print(type((1,2,3))) #<class 'tuple'>
+print(type([1,2,3])) #<class 'list'>
+
+for i in range(0, 3, 3): #increment by 3
+  print(i)  #0
+for i in range(0, 4, 3): #increment by 3
+  print(i)  #0.3.
+  
+from random import randint,choice
+myar = ('q','w','e','r','t','y')
+for i in range(1,2):  #1
+  print(randint(5,6)) #5 or 6
+  print(choice(myar))
+
+ar = (1, 2, 3)
+print(ar * 3) #(1,2,3,1,2,3,1,2,3)
+ar = [1, 2, 3]
+print(ar * 3) #[1,2,3,1,2,3,1,2,3]
+
+print(repr('sup\n')) #'sup\n'
+print(type('sup\n')) #<class 'str'>
+
+python -c "print('hello'.rjust(10))"
+#     hello
+
+#string slice/substring
+v = 'sup'
+v[-1:]    #'p'
+v[-2:-1]  #'u'
+
+i = int(input('Enter a number: '))
+if i == 0:
+  print('found 0')
+elif i == 1:
+  print('found 1')
+else:
+  print('found unknown')
+
+myString = 'Y'
+if myString.lower() in ('y', 'yes'):
+  print('You have won!')
+
+import re
+print(re.compile('my?reg', re.IGNORECASE).search('abcdefghijklmregno'))
+#<_sre.SRE_Match object; span=(12, 16), match='mreg'>
+https://docs.python.org/3/library/re.html#match-objects
+
+hello = False or True
+print(hello,1,2,3, end="", sep="") #True123
+
+def fib(num):
+  x, y = 0, 1
+  while x < num:
+    print(x, end=' ', sep='', flush=True)
+    x, y = y, x+y
+  print()
+fib(200) #0 1 1 2 3 5 8 13 21 34 55 89 144
+
+mylist = ('column 1', 'column 2', 'column 3', 'column 4');
+print(' | '.join(mylist[-2:]));
+
+'''This is a comment.
+multi-lined :D
+'''
+
+def subroutine_name(name=None, whatever=None):
+  if name:
+    print('your name must be ' + str(name) + '. Interesting.')
+
+ar1 = [1,2,3] #list
+ar2 = (1,2,3) #tuple
+ar1.insert(0, 'first')
+#ar2.insert(0, 'first') ERROR
+print(ar1)
+
+myar = [1,2,3,4,5,6]
+del myar[0]   #0=>1
+del myar[0:1] #0=>None, 1=>2
+print(myar)   #[3,4,5,6]
+del myar[:]   #now an empty list. (myar.clear())
+del myar      #can never access myar again.
+myar = [1,2,2,3,3,3]
+myar.count(3) #3  IE. "count how many times this value is in the array"
+
+myar = [1,2,3,4,5,6]
+del myar[0]
+myar.insert(0,1)
+del myar[0]
+print(myar) #2,3,4,5,6
+print(myar.index(6))  #IE. "find location where value=6"
+                      #=4
+
+myar       = [0,1,2,3,4,5,6]
+myar.pop(2)
+print(myar) #[0,1,  3,4,5,6]
+
+myar = [0,1]
+myar.extend((2,3))        #IE. "extend the list/array with these fresh values"
+myar[len(myar):] = (4,5,6)#IE. (samething)
+print(myar)
+
+#does it look like a number?
+import numbers
+ar = (1,'sz',2.6,'sz3333',3)
+for value in ar:
+  if isinstance(value, numbers.Number):
+    print(str(value) + ' looks like a number')
+  else:
+    print(value + ' looks like a string')
+(6.11111).is_integer() # False.
+for value in b'to integers and beyond!':
+  print(value)
+
+for n in range(5): #0..4
+  print(n)
+for n in range(1,10): #1..9
+  print(n)
+ar = list(range(5))
+ar.insert(0, 'first')
+print(ar)
+
+key = True
+value = False
+assert(key is not False and value is not True)
+v = 'hello'
+assert isinstance(v, str)
+assert v.replace('.', '').replace('-', '').replace('_', '').isalnum()
+
+print chr(97) #'a'
+from struct import unpack
+print(unpack('c', bytes(chr(97), 'ASCII'))) #(b'a',)
+
+var = None
+if var == None:
+  print('nothing')
+if var is None: #preferred!
+  print('still nothing')
+
+keys = (1,3,2,4)
+for k in keys:
+  print(k)
+  continue
+  break
+
+#like Data::Dumper() and crazzzy syntax :D
+myar = [1,
+2,3,4,[1],[],
+                 3]
+print(myar)
+
+mystring = 'hello %d' % 500
+print(mystring)
+mystring = 'hello {}'.format(501)
+print(mystring)
+
+mystring = ('concat'
+'this and' 'this')
+print(mystring)
+
+if 0 == '':
+  print('sup1')
+elif '' == False:
+  print('sup1.5')
+elif 0 == False:
+  print('sup2') #DING!!!
+else:
+  print('sup3')
