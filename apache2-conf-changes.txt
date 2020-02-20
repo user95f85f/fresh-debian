@@ -1,0 +1,11 @@
+/etc/apache2/apache2.conf example change:
+
+<Directory /media/user/mydebhelper/Documents/>
+Options Indexes FollowSymLinks
+AllowOverride None
+Require all granted
+</Directory>
+
+/etc/apache2/sites-available/000-default.conf example change:
+
+DocumentRoot /media/user/mydebhelper/Documents
