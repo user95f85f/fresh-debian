@@ -1,0 +1,7 @@
+find /usr/share/X11/xorg.conf.d/40-libinput.conf
+find "touchpad"
+put this toward the end of the paragraph:
+
+Option "Tapping" "on"
+
+sudo systemctl restart lightdm #restart your GUI system
