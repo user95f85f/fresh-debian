@@ -1,0 +1,18 @@
+weechat -a -p #disable plugins and auto-join feature
+
+/plugin load irc #load IRC plugin
+
+/nick ****
+/server add freenode chat.freenode.net
+/connect freenode
+/msg NickServ identify ****
+
+
+
+/set irc.server_default.nicks ****
+/set irc.server_default.username k
+/set irc.server_default.msg_part ""
+/set irc.server_default.msg_quit ""
+/server add freenode irc.freenode.net -autoconnect
+
+/set irc.server_default.capabilities "account-notify,away-notify,cap-notify,multi-prefix,server-time"
