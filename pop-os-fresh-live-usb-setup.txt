@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#the first 3 is to get rid of open ports.
+#the last 1 is to avoid the screen from being flipped
 sudo apt purge cups-daemon avahi-daemon cups-browsed iio-sensor-proxy
 sudo apt-get update
 sudo apt install atool chromium-browser hexchat php7.2-cli
