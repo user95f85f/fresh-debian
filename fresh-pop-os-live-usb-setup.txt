@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo apt purge cups-daemon avahi-daemon cups-browsed iio-sensor-proxy
+sudo apt-get update
+sudo apt install atool chromium-browser hexchat php7.2-cli
