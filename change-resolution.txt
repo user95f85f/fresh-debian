@@ -1,5 +1,5 @@
 
-
+#1280x720  720p resolution
 cvt 800 600 60 #copy and paste output:
 xrandr --newmode 800x600_60.00 \
 38.25 800 832 912 1024 600 603 607 624 -hsync +vsync
