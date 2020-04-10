@@ -5,3 +5,8 @@ xrandr --newmode 800x600_60.00 \
 38.25 800 832 912 1024 600 603 607 624 -hsync +vsync
 xrandr --addmode eDP-1-1 800x600_60.00
 xrandr --output eDP-1-1 --mode 800x600_60.00
+
+#for my gaming computer:
+xrandr --newmode 1280x720_60.00 74.50  1280 1344 1472 1664  720 723 728 748 -hsync +vsync
+xrandr --addmode eDP-1-1 1280x720_60.00
+xrandr --output eDP-1-1 --mode 1280x720_60.00
