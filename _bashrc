@@ -1,7 +1,90 @@
+since_sleep(){ #IE. how long have I been sleeping for?
+  perl ~/since-sleep.pl "$(ps | grep sleep | awk '{print $7}')" "$(date +%H:%M:%S)"
+}
+alias google='ping google.com;sleep 2;exit 0' #IE. test internet connection
+alias weechat='weechat -a -p'
+alias ffplay='/cygdrive/c/ffmpeg/bin/ffplay -autoexit'
+alias ffplay2='/cygdrive/c/ffmpeg/bin/ffplay -autoexit -nodisp' #</for music>
+
 alias youtube-dl-x='./youtube-dl --audio-quality 0 --audio-format mp3 -x'
 alias l='ls'
 alias ..='cd ..'
 alias mv='/usr/bin/mv -i'
 cd2(){
 mkdir "$1" && cd "$1"
+}
+
+
+#<~/since-sleep.pl>
+#!/usr/bin/perl
+
+$i1=$ARGV[0]; #EG. 10:10:10
+$i2=$ARGV[1]; #EG. 11:11:11
+
+if($i1 eq ''){
+  die '';
+}
+elsif($i2 eq ''){
+  die '';
+}
+
+sub assert($$){
+  my $arg1 = shift;
+  my $arg2 = shift;
+  if($arg1 ne $arg2){
+    die "$arg1 != $arg2";
+  }
+  return 1;
+}
+sub println($){
+  my $arg1 = shift;
+  print "$arg1\n";
+}
+
+#<testing>
+assert(time_diff(split(/:/, '00:00:00'), split(/:/, '01:01:01')), '1:1:1') and println 'test 1 OK';
+assert(time_diff(split(/:/, '23:00:00'), split(/:/, '01:01:01')), '2:1:1') and println 'test 2 OK';
+assert(time_diff(split(/:/, '01:01:01'), split(/:/, '02:02:02')), '1:1:1') and println 'test 3 OK';
+assert(time_diff(split(/:/, '01:01:00'), split(/:/, '02:00:00')), '0:59:0') and println 'test 4 OK';
+assert(time_diff(split(/:/, '01:00:01'), split(/:/, '02:00:00')), '0:59:59') and println 'test 5 OK';
+#</testing>
+
+
+my $diff = time_diff(split(/:/, $i1), split(/:/, $i2));
+$diff =~ s/(\d+):(\d+):(\d+)/\1hr \2min \3sec sleeping/;
+print $diff;
+
+
+sub time_diff($$$$$$){
+  my $hr_before = shift;
+  my $min_before = shift;
+  my $sec_before = shift;
+
+  my $hr_after = shift;
+  my $min_after = shift;
+  my $sec_after = shift;
+
+  #01:01:00-02:00:00
+  #hr_diff = 0
+  #min_diff = 59
+  #sec_diff = 0
+  my $hr_diff = $hr_after - $hr_before;
+  if($hr_diff < 0.0){
+    $hr_diff = 24 - $hr_before + $hr_after;
+  }
+  my $min_diff = $min_after - $min_before;
+  if($min_diff < 0.0){
+    $hr_diff--;
+    $min_diff = 60 - $min_before + $min_after;
+  }
+  my $sec_diff = $sec_after - $sec_before;
+  if($sec_diff < 0.0){
+    $min_diff--;
+    $sec_diff = 60 - $sec_before + $sec_after;
+    if($min_diff < 0.0){
+      $hr_diff--;
+      $min_diff = 60 + $min_diff;
+    }
+  }
+  return "$hr_diff:$min_diff:$sec_diff";
 }
