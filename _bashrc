@@ -1,5 +1,5 @@
-since_sleep(){ #IE. how long have I been sleeping for?
-  perl ~/since-sleep.pl "$(ps | grep sleep | awk '{print $7}')" "$(date +%H:%M:%S)"
+sleep_since(){
+  perl ~/sleep-since.pl "$(ps | grep '/usr/bin/sleep' | head -1 | awk '{print $7}')" "$(date +%H:%M:%S)"
 }
 alias google='ping google.com;sleep 2;exit 0' #IE. test internet connection
 alias weechat='weechat -a -p'
@@ -15,7 +15,19 @@ mkdir "$1" && cd "$1"
 }
 
 
-#<~/since-sleep.pl>
+#<~/str-reverse.pl>
+#!/usr/bin/perl
+my $str = $ARGV[0] or die '';
+my @ar = split / /, $str;
+foreach my $i (0 .. $#ar){
+  print join('', reverse(split(//, $ar[$i])));
+  if($i < $#ar){print ' ';}
+}
+print "\n";
+
+
+
+#<~/sleep-since.pl>
 #!/usr/bin/perl
 
 $i1=$ARGV[0]; #EG. 10:10:10
@@ -51,7 +63,7 @@ assert(time_diff(split(/:/, '01:00:01'), split(/:/, '02:00:00')), '0:59:59') and
 
 
 my $diff = time_diff(split(/:/, $i1), split(/:/, $i2));
-$diff =~ s/(\d+):(\d+):(\d+)/\1hr \2min \3sec sleeping/;
+$diff =~ s/(\d+):(\d+):(\d+)/\1hr \2min \3sec slept so far/;
 print $diff;
 
 
