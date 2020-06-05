@@ -3,7 +3,7 @@ sleep_since(){
 }
 alias google='ping google.com;sleep 2;exit 0' #IE. test internet connection
 alias weechat='weechat -a -p'
-alias ffplay='/cygdrive/c/ffmpeg/bin/ffplay -autoexit' #</for videos or big music files>
+alias ffplay1='/cygdrive/c/ffmpeg/bin/ffplay -autoexit' #</for videos or big music files>
 alias ffplay2='/cygdrive/c/ffmpeg/bin/ffplay -autoexit -nodisp' #</for small music files>
 
 alias youtube-dl-x='./youtube-dl --audio-quality 0 --audio-format mp3 -x'
