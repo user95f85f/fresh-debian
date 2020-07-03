@@ -1,2 +1,3 @@
-:se ts=2
+:se ts=3
+:se sw=3
 :se expandtab
