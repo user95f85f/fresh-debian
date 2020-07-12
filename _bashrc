@@ -1,7 +1,9 @@
+#REM this is window's cygwin-only
 sleep_since(){
   perl ~/sleep-since.pl "$(ps | grep '/usr/bin/sleep' | head -1 | awk '{print $7}')" "$(date +%H:%M:%S)"
 }
-alias google='ping google.com;sleep 2;exit 0' #IE. test internet connection
+alias inxi2='sudo /usr/bin/inxi -plu' #REM this is ubuntu-only. shows swap-usage, mounted-usage
+alias google='ping google.com;sleep 2;exit 0' #IE. test internet connection REM this is windows cygwin-only
 alias weechat='weechat -a -p'
 alias ffplay1='/cygdrive/c/ffmpeg/bin/ffplay -autoexit' #</for videos or big music files>
 alias ffplay2='/cygdrive/c/ffmpeg/bin/ffplay -autoexit -nodisp' #</for small music files>
@@ -9,7 +11,7 @@ alias ffplay2='/cygdrive/c/ffmpeg/bin/ffplay -autoexit -nodisp' #</for small mus
 alias youtube-dl-x='./youtube-dl --audio-quality 0 --audio-format mp3 -x'
 alias l='ls'
 alias ..='cd ..'
-alias mv='/usr/bin/mv -i'
+alias mv='/usr/bin/mv -i' #REM this is system dependent
 cd2(){
 mkdir "$1" && cd "$1"
 }
