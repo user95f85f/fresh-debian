@@ -5,3 +5,68 @@
 sudo apt purge cups-daemon avahi-daemon cups-browsed iio-sensor-proxy
 sudo apt-get update
 sudo apt install atool chromium-browser hexchat php7.2-cli
+
+
+exit 0
+
+read -p 'fix datetime and hit ENTER' myv
+read -p 'turn down the volume and hit ENTER' myv
+sudo swapon /dev/sdb2
+#cvt 1280 720 60.00
+xrandr --newmode 1280x720_60.00 74.50 1280 1344 1472 1664 720 723 728 748 -hsync +vsync
+xrandr --addmode eDP-1-1 1280x720_60.00
+xrandr --output eDP-1-1 --mode 1280x720_60.00
+read -p 'press ENTER' myv
+sudo systemctl stop cron
+sudo systemctl stop bluetooth
+sudo systemctl stop pop-upgrade
+sudo apt purge firefox\*
+echo enable performance
+nvidia-settings #enable performance
+cp /media/pop-os/EXTLB/_vimrc ~/.vimrc
+cat /media/pop-os/EXTLB/_bashrc >> ~/.bashrc
+cp /media/pop-os/EXTLB/youtube-dl ~/
+sudo dpkg -iR /media/pop-os/EXTLB/essential-debs1of2
+read -p 'press ENTER for more deb installs' myv
+sudo dpkg -iR /media/pop-os/EXTLB/essential-debs2of2
+read -p 'press ENTER for more deb installs' myv
+sudo dpkg -iR /media/pop-os/EXTLB/ffmpeg-debs
+
+#get controller working
+sudo bash -c 'echo "" >> /etc/sysfs.conf;echo "/module/bluetooth/parameters/disable_ertm=1" >> /etc/sysfs.conf'
+sudo systemctl restart sysfsutils
+sudo systemctl start bluetooth
+
+#play WoW
+sudo dpkg -iR /media/pop-os/EXTLB/wine1of3-debs
+read -p 'press ENTER for more deb installs' myv
+sudo dpkg -iR /media/pop-os/EXTLB/wine2of3-debs
+sudo dpkg -iR /media/pop-os/EXTLB/wine2of3-debs
+read -p 'press ENTER for more deb installs' myv
+sudo dpkg -iR /media/pop-os/EXTLB/wine3of3-debs
+sudo dpkg -a --configure
+cd '/media/pop-os/EXTLB/WOW_wineprefix/drive_c/Program Files (x86)/Battle.net'
+export XMODIFIERS=''
+export WINEPREFIX=/media/pop-os/EXTLB/WOW_wineprefix
+read -p 'press ENTER to play' myv
+WINEDEBUG=-all wine 'C:\\Program Files (x86)\\Battle.net\\Battle.net Launcher.exe'
+
+#play Diablo 1
+cd /media/pop-os/EXTLB/DIAB_wineprefix/drive_c/DIAB/Belz
+export XMODIFIERS=''
+export WINEPREFIX=/media/pop-os/EXTLB/DIAB_wineprefix
+read -p 'press ENTER to play' myv
+WINEDEBUG=-all wine 'C:\\DIAB\\Belz\\Belzebub.exe'
+
+#play GTA5
+cd
+ln -s /media/pop-os/EXTLB/local_share_Steam .local/share/Steam
+ln -s /media/pop-os/EXTLB/dotsteam .steam
+read -p 'made the links, press ENTER' myv
+sudo dpkg -i /media/pop-os/EXTLB/steam_latest.deb
+read -p 'installed steam, press ENTER to play steam' myv
+steam
+
+#play Borderlands 2
+cd
+ln -s /media/pop-os/EXTLB/local_share_aspyr-media .local/share/aspyr-media
