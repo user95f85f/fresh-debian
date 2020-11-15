@@ -9,6 +9,6 @@ time sudo dd if=/dev/zero of=/dev/sda bs=10M
 echo shred -vfz
 date
 # -v is for verbose, -f is for permissions, -z is for the zero-out lap
-time sudo shred -vfz /dev/sda    #does 3 laps + 1 zero
+time sudo shred -vfz /dev/sda    #does 3 laps random-data + 1 zero-data
 echo all done
 date
