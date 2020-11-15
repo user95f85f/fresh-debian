@@ -1,0 +1,23 @@
+
+sudo apt purge iio-sensor-proxy cups-daemon cups-browsed avahi-daemon
+sudo apt autoremove
+read -p 'fix datetime and hit ENTER' myv
+read -p 'turn down the volume and hit ENTER' myv
+umount /media/pop-os/POPME
+#REM these are used by wine for wow and diablo 1
+rmdir ~/Templates ~/Public ~/Music ~/Videos ~/Pictures 
+#cvt 1280 720 60.00
+xrandr --newmode 1280x720_60.00 74.50 1280 1344 1472 1664 720 723 728 748 -hsync +vsync
+xrandr --addmode eDP-1-1 1280x720_60.00
+xrandr --output eDP-1-1 --mode 1280x720_60.00
+read -p 'press ENTER' myv
+sudo systemctl stop cron
+sudo systemctl disable bluetooth
+sudo systemctl stop bluetooth
+sudo systemctl stop pop-upgrade
+sudo apt purge firefox\*
+cat /media/pop-os/POPHELP/_bashrc >> ~/.bashrc
+sudo dpkg -iR /media/pop-os/POPHELP/chromium-debs
+sudo dpkg -iR /media/pop-os/POPHELP/vim-debs #gives a weird error at first
+sudo dpkg -iR /media/pop-os/POPHELP/vim-debs
+sudo dpkg -iR /media/pop-os/POPHELP/hexchat-debs
